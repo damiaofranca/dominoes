@@ -1,0 +1,84 @@
+.container-card {
+  display         : flex;
+  width           : 100%;
+  max-width       : 440px;
+  flex-direction  : column;
+  background-color: #ffff;
+  border-radius   : 0.3rem;
+  padding         : 23px;
+}
+
+.card .card-header {
+  display       : flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 700;
+  font-size  : 32px;
+  text-align : center;
+  color      : #101419;
+}
+
+.subtitle {
+  font-weight  : 500;
+  font-size    : 12px;
+  margin-bottom: 18px;
+  text-align   : center;
+  color        : #a4b0c0;
+}
+
+.label-field {
+  font-size: 13px;
+  color    : #cad0d8;
+}
+
+
+select {
+  flex            : 1;
+  border          : 0;
+  margin-top      : 8px;
+  font-size       : 1em;
+  width           : 100%;
+  box-shadow      : none;
+  background-image: none;
+  height          : 2.4em;
+  border-radius   : .25em;
+  padding         : 0 .5em;
+  cursor          : pointer;
+  background      : #d8e3e1;
+  color           : #798ba1;
+
+  &:focus {
+    outline-color: #cad0d8;
+  }
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+.container-submit {
+  width     : 100%;
+  margin-top: 18px;
+
+  &>button {
+    border          : none;
+    padding         : 12px;
+    width           : 100%;
+    border-radius   : 0.2rem;
+    color           : #fff;
+    cursor          : pointer;
+    background-color: #30b28d;
+    transition      : all 10ms ease-in-out;
+
+
+    font-size  : 16px;
+    font-weight: 700;
+
+
+    &:hover {
+      background-color: #27a07e;
+    }
+  }
+}

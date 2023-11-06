@@ -1,0 +1,167 @@
+.even-6-6,
+.even-6-5,
+.even-6-4,
+.even-6-3,
+.even-6-2,
+.even-6-1,
+.even-6-0,
+.even-5-5,
+.even-5-4,
+.even-5-3,
+.even-5-2,
+.even-5-1,
+.even-5-0,
+.even-4-4,
+.even-4-3,
+.even-4-2,
+.even-4-1,
+.even-4-0,
+.even-3-3,
+.even-3-2,
+.even-3-1,
+.even-3-0,
+.even-2-2,
+.even-2-1,
+.even-2-0,
+.even-1-1,
+.even-1-0,
+.even-0-0 {
+	margin: 10px;
+	height: 140px;
+	min-width: 80px;
+	cursor: pointer;
+	width: fit-content;
+	position: relative;
+	border-radius: 0.2rem;
+	background-color: #ffffff;
+	box-shadow: 1px 3px 1px 1px #646161;
+	&::before {
+		top: 50%;
+		content: "";
+		width: 100%;
+		height: 2px;
+		position: absolute;
+		transform: translateY(-50%);
+		background-color: #646161;
+	}
+
+	& > div {
+		height: 50%;
+		position: relative;
+
+		& > .point {
+			width: 10px;
+			height: 10px;
+			position: absolute;
+			border-radius: 100%;
+			background-color: #000;
+		}
+	}
+
+	& > .side-with-6 {
+		& > .point-1 {
+			top: 10px;
+			left: 16px;
+		}
+		& > .point-2 {
+			top: 30px;
+			left: 16px;
+		}
+		& > .point-3 {
+			bottom: 10px;
+			left: 16px;
+		}
+		& > .point-4 {
+			top: 10px;
+			right: 16px;
+		}
+		& > .point-5 {
+			top: 30px;
+			right: 16px;
+		}
+		& > .point-6 {
+			bottom: 10px;
+			right: 16px;
+		}
+	}
+
+	& > .side-with-5 {
+		& > .point-1 {
+			top: 10px;
+			left: 16px;
+		}
+		& > .point-2 {
+			bottom: 10px;
+			left: 16px;
+		}
+		& > .point-3 {
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		& > .point-4 {
+			top: 10px;
+			right: 16px;
+		}
+		& > .point-5 {
+			bottom: 10px;
+			right: 16px;
+		}
+	}
+
+	& > .side-with-4 {
+		& > .point-1 {
+			top: 10px;
+			left: 16px;
+		}
+		& > .point-2 {
+			bottom: 10px;
+			left: 16px;
+		}
+		& > .point-3 {
+			top: 10px;
+			right: 16px;
+		}
+
+		& > .point-4 {
+			bottom: 10px;
+			right: 16px;
+		}
+	}
+
+	& > .side-with-3 {
+		& > .point-1 {
+			left: 16px;
+			bottom: 10px;
+		}
+		& > .point-2 {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		& > .point-3 {
+			top: 10px;
+			right: 16px;
+		}
+	}
+
+	& > .side-with-2 {
+		& > .point-1 {
+			left: 16px;
+			bottom: 10px;
+		}
+		& > .point-2 {
+			top: 10px;
+			right: 16px;
+		}
+	}
+
+	& > .side-with-1 {
+		& > .point-1 {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+}
