@@ -1,16 +1,16 @@
 import { FC, useState } from "react";
+
 import "./styles.scss";
+import { IGameContext } from "../../providers/Game/types";
 
-interface IStartGame {
-	onFinish: (name: string) => void;
-}
+interface IStartGame extends Pick<IGameContext, "onStart"> {}
 
-export const StartGame: FC<IStartGame> = ({ onFinish }) => {
+export const StartGame: FC<IStartGame> = ({ onStart }) => {
 	const [name, setName] = useState<string>("");
 
-	const onStart = () => {
+	const onStartFn = () => {
 		if (name.length >= 3) {
-			onFinish(name);
+			onStart({ name });
 		} else {
 			alert("O apelido deve ter pelo menos 3 letras");
 		}
@@ -20,7 +20,7 @@ export const StartGame: FC<IStartGame> = ({ onFinish }) => {
 		<div className="container-card">
 			<h1 className="title">Dominó</h1>
 			<h4 className="subtitle">
-				Uns dos jogos mais tradicionais dos brasileirinho
+				Uns dos jogos mais tradicionais dos brasileirinhos
 			</h4>
 			<div className="container-config">
 				<label htmlFor="name" className="label-field">
@@ -35,7 +35,7 @@ export const StartGame: FC<IStartGame> = ({ onFinish }) => {
 				/>
 
 				<div className="container-submit">
-					<button onClick={onStart} disabled={name.length < 3}>
+					<button onClick={onStartFn} disabled={name.length < 3}>
 						Entrar
 					</button>
 				</div>

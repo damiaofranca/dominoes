@@ -28,17 +28,24 @@
 	color: #a4b0c0;
 }
 
-.label-field {
-	font-size: 13px;
-	color: #cad0d8;
+.container-config {
+	display: flex;
+	margin-bottom: 12px;
+	flex-direction: column;
 }
 
-.name-field {
+.label-field {
+	font-size: 13px;
+	color: #b1bac7;
+	margin-bottom: 8px;
+}
+
+input {
 	width: 100%;
 	border: none;
 	height: 42px;
-	color: #798ba1;
 	padding: 0 0.5em;
+	color: #798ba1;
 	border-radius: 0.25em;
 	background: #d8e3e1;
 
@@ -49,6 +56,30 @@
 	&::placeholder {
 		color: #b8c3d3;
 	}
+}
+
+select {
+	width: 100%;
+	border: none;
+	height: 42px;
+	font-size: 1em;
+	cursor: pointer;
+	color: #798ba1;
+	padding: 0 0.5em;
+	background: #d8e3e1;
+	border-radius: 0.25em;
+
+	&:focus {
+		outline-color: #cad0d8;
+	}
+
+	&::placeholder {
+		color: #b8c3d3;
+	}
+}
+
+select::-ms-expand {
+	display: none;
 }
 
 .container-submit {
@@ -69,12 +100,6 @@
 		font-weight: 700;
 
 		&:hover {
-			background-color: #27a07e;
-		}
-
-		&:disabled {
-			opacity: 0.6;
-			cursor: default;
 			background-color: #27a07e;
 		}
 	}

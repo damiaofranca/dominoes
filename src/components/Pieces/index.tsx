@@ -3,10 +3,11 @@ import { FC } from "react";
 import "./styles.scss";
 
 interface IPieces {
-	pieces?: (string | undefined)[];
+	pieces: string[];
+	onSelectPiece: (move: number[]) => void;
 }
 
-export const Pieces: FC<IPieces> = ({ pieces = [] }) => {
+export const Pieces: FC<IPieces> = ({ pieces, onSelectPiece }) => {
 	const generateNumber = (val: number) => {
 		const arr: number[] = [];
 
@@ -16,11 +17,18 @@ export const Pieces: FC<IPieces> = ({ pieces = [] }) => {
 
 		return arr;
 	};
+	const onSelectPieceFn = (piece: string) => {
+		onSelectPiece([Number(piece[6]), Number(piece[8])]);
+	};
 
 	return (
 		<>
 			{pieces.map((piece) => (
-				<div className={piece} key={piece}>
+				<div
+					key={piece}
+					className={piece}
+					onClick={() => onSelectPieceFn(piece)}
+				>
 					<div className={`side-with-${piece ? piece.split("-")[1] : ""}`}>
 						{piece ? (
 							generateNumber(Number(piece.split("-")[1])).map((_, idx) => (

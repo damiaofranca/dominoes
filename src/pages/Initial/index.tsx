@@ -1,32 +1,42 @@
 import { FC, useState, useEffect } from "react";
-import "./styles.css";
+import "./styles.scss";
 
 import { socket } from "../../socket/index";
 import { useNavigate } from "react-router-dom";
+import { useGame } from "../../hooks/useGame";
 
 interface IInitial {}
 
 export const Initial: FC<IInitial> = () => {
+	const { onSetRoom } = useGame();
 	const navigate = useNavigate();
+	const [room, setRoom] = useState<string>("");
 	const [maxPlayers, setMaxPlayers] = useState<number>(2);
 
+	const onChangeName = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+		setRoom(target.value);
+	};
+
+	const onSelectQuantity = ({
+		target,
+	}: React.ChangeEvent<HTMLSelectElement>) => {
+		setMaxPlayers(Number(target.value));
+	};
+
 	const onConnect = () => {
-		if (typeof maxPlayers === "number") {
-			socket.emit("createRoom", maxPlayers);
+		if (typeof maxPlayers === "number" && room.length >= 3) {
+			socket.emit("create", { maxPlayers, room });
 		}
-		return null;
 	};
 
 	useEffect(() => {
-		const enterRoom = socket.on(
-			"roomCreated",
-			({ roomID }: { roomID: string }) => {
-				navigate(`room/${roomID}`);
-			},
-		);
+		const enter = socket.on("created", (roomCb: string) => {
+			onSetRoom(roomCb);
+			navigate(`room/${roomCb}`);
+		});
 
 		return () => {
-			enterRoom.off("roomCreated");
+			enter.off("created");
 		};
 	});
 
@@ -34,8 +44,20 @@ export const Initial: FC<IInitial> = () => {
 		<div className="container-card">
 			<h1 className="title">Dominó</h1>
 			<h4 className="subtitle">
-				Uns dos jogos mais tradicionais dos brasileirinho
+				Uns dos jogos mais tradicionais dos brasileirinhos
 			</h4>
+			<div className="container-config">
+				<label htmlFor="maxPlayer" className="label-field">
+					*Digite o nome da sala
+				</label>
+				<input
+					type="text"
+					value={room}
+					onChange={onChangeName}
+					placeholder="Ex:Jogo do bill"
+				/>
+			</div>
+
 			<div className="container-config">
 				<label htmlFor="maxPlayer" className="label-field">
 					*Selecione a quantidade de jogadores
@@ -43,8 +65,8 @@ export const Initial: FC<IInitial> = () => {
 				<select
 					id="maxPlayer"
 					value={maxPlayers}
+					onChange={onSelectQuantity}
 					placeholder="Quantidade maxima de jogadores"
-					onChange={({ target }) => setMaxPlayers(Number(target.value))}
 				>
 					<option value="2">2 jogadores</option>
 					<option value="3">3 jogadores</option>

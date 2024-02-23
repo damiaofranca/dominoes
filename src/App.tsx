@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { InRoom, Initial } from "./pages";
 import { Test } from "./pages/Test";
+import { GameProvider } from "./providers/Game";
 
 const router = createBrowserRouter([
 	{
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
 		element: <Initial />,
 	},
 	{
-		path: "/room/:id",
+		path: "/room/:room",
 		element: <InRoom />,
 	},
 	{
@@ -23,10 +24,12 @@ const router = createBrowserRouter([
 
 function App() {
 	return (
-		<div className="container">
-			<RouterProvider router={router} />
-			<ToastContainer />
-		</div>
+		<GameProvider>
+			<div className="container">
+				<RouterProvider router={router} />
+				<ToastContainer />
+			</div>
+		</GameProvider>
 	);
 }
 

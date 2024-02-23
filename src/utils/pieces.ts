@@ -1,30 +1,18 @@
-export const totalPieces = {
-	"even-6-6": [6, 6],
-	"even-6-5": [6, 5],
-	"even-6-4": [6, 4],
-	"even-6-3": [6, 3],
-	"even-6-2": [6, 2],
-	"even-6-1": [6, 1],
-	"even-6-0": [6, 0],
-	"even-5-5": [5, 5],
-	"even-5-4": [5, 4],
-	"even-5-3": [5, 3],
-	"even-5-2": [5, 2],
-	"even-5-1": [5, 1],
-	"even-5-0": [5, 0],
-	"even-4-4": [4, 4],
-	"even-4-3": [4, 3],
-	"even-4-2": [4, 2],
-	"even-4-1": [4, 1],
-	"even-4-0": [4, 0],
-	"even-3-3": [3, 3],
-	"even-3-2": [3, 2],
-	"even-3-1": [3, 1],
-	"even-3-0": [3, 0],
-	"even-2-2": [2, 2],
-	"even-2-1": [2, 1],
-	"even-2-0": [2, 0],
-	"even-1-1": [1, 1],
-	"even-1-0": [1, 0],
-	"even-0-0": [0, 0],
+export const checkIfHavePiece = (
+	myPieces: Array<number[]>,
+	totalPieces: Array<number[]>,
+) => {
+	if (totalPieces.length > 0) {
+		const isAvailable = myPieces.findIndex(
+			(e) =>
+				e[0] === totalPieces[0][0] ||
+				e[1] === totalPieces[0][0] ||
+				e[0] === totalPieces[totalPieces.length - 1][1] ||
+				e[1] === totalPieces[totalPieces.length - 1][1],
+		);
+
+		return isAvailable !== -1;
+	}
+
+	return false;
 };

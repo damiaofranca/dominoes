@@ -1,31 +1,31 @@
-.even-6-6,
-.even-6-5,
-.even-6-4,
-.even-6-3,
-.even-6-2,
-.even-6-1,
-.even-6-0,
-.even-5-5,
-.even-5-4,
-.even-5-3,
-.even-5-2,
-.even-5-1,
-.even-5-0,
-.even-4-4,
-.even-4-3,
-.even-4-2,
-.even-4-1,
-.even-4-0,
-.even-3-3,
-.even-3-2,
-.even-3-1,
-.even-3-0,
-.even-2-2,
-.even-2-1,
-.even-2-0,
-.even-1-1,
-.even-1-0,
-.even-0-0 {
+.piece-6-6,
+.piece-6-5,
+.piece-6-4,
+.piece-6-3,
+.piece-6-2,
+.piece-6-1,
+.piece-6-0,
+.piece-5-5,
+.piece-5-4,
+.piece-5-3,
+.piece-5-2,
+.piece-5-1,
+.piece-5-0,
+.piece-4-4,
+.piece-4-3,
+.piece-4-2,
+.piece-4-1,
+.piece-4-0,
+.piece-3-3,
+.piece-3-2,
+.piece-3-1,
+.piece-3-0,
+.piece-2-2,
+.piece-2-1,
+.piece-2-0,
+.piece-1-1,
+.piece-1-0,
+.piece-0-0 {
 	margin: 10px;
 	height: 140px;
 	min-width: 80px;
@@ -34,7 +34,7 @@
 	position: relative;
 	border-radius: 0.2rem;
 	background-color: #ffffff;
-	box-shadow: 1px 3px 1px 1px #646161;
+	box-shadow: 3px 3px 1px 1px #646161;
 	&::before {
 		top: 50%;
 		content: "";
