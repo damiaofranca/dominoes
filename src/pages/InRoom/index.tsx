@@ -1,9 +1,9 @@
 import { FC } from "react";
+import { useParams } from "react-router-dom";
 
 import { StartGame } from "../../components";
 import { useGame } from "../../hooks/useGame";
 import { Ready } from "../../components/Ready";
-import { useParams } from "react-router-dom";
 
 export const InRoom: FC = () => {
 	const { room } = useParams();
@@ -12,7 +12,6 @@ export const InRoom: FC = () => {
 	if (room) {
 		onVerifyRoom(room);
 	}
-
 	if (infoPlayer && room) {
 		return <Ready />;
 	}

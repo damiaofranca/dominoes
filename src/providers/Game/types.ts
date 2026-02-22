@@ -1,4 +1,4 @@
-import { InfoPlayer } from "../../interfacers/actions";
+import { InfoPlayer, Player } from "../../interfacers/actions";
 
 export interface IGameContext {
 	isYourTime: boolean;
@@ -8,6 +8,8 @@ export interface IGameContext {
 	moves: Array<number[]>;
 	selectedPiece: number[];
 	infoPlayer: InfoPlayer | null;
+	/** Resumo dos outros jogadores (id, name, total de peças) - atualizado em newMove e playerDrewPiece */
+	playersSummary: Player[];
 
 	onSignOut: () => void;
 	onAskForPiece: () => void;

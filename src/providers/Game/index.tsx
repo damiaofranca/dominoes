@@ -4,7 +4,7 @@ import { FC, useState, useEffect, ReactNode, createContext } from "react";
 
 import { socket } from "../../socket";
 import { IGameContext } from "./types";
-import { InfoPlayer, NewMove } from "../../interfacers/actions";
+import { InfoPlayer, NewMove, Player } from "../../interfacers/actions";
 import { checkIfHavePiece } from "../../utils";
 
 interface IGame {
@@ -39,6 +39,8 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 	const [roomSaved, setRoomSaved] = useState<string | null>(() =>
 		localStorage.getItem("room"),
 	);
+
+	const [playersSummary, setPlayersSummary] = useState<Player[]>([]);
 
 	const onStart = ({ name }: { name: string }) => {
 		if (roomSaved) {
@@ -79,7 +81,6 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 				id: infoPlayer.id,
 				move: selectedPiece,
 			});
-			console.log(selectedPiece, myPieces);
 			setSelectedPiece([]);
 			setIsYourTime(false);
 		}
@@ -89,7 +90,7 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 		if (infoPlayer && myPieces.length && roomSaved) {
 			if (!checkIfHavePiece(myPieces, moves)) {
 				socket.emit(
-					"ashForPiece",
+					"askForPiece",
 					{ roomID: roomSaved, id: infoPlayer.id },
 					(value: number[] | string) => {
 						if (Array.isArray(value)) {
@@ -115,17 +116,14 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 		socket.emit(
 			"verifyRoom",
 			{ room, user: infoPlayer?.id },
-			(isValid: boolean | object) => {
-				if (typeof isValid === "object") {
-					localStorage.clear();
-					setInfoPlayer(null);
+			(isValid: boolean) => {
+				if (isValid) {
+					onSetRoom(room);
 				} else {
-					if (isValid) {
-						onSetRoom(room);
-					} else {
-						toast.error("Sala não encontrada.");
-						window.location.href = "/";
-					}
+					toast.error(
+						"Sala não está disponível (cheia, inexistente ou já iniciada).",
+					);
+					window.location.href = "/";
 				}
 			},
 		);
@@ -169,7 +167,7 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 	});
 
 	useEffect(() => {
-		const ready = socket.on("ready", ({ pieces, ...rest }) => {
+		const ready = socket.on("ready", ({ pieces, players, ...rest }) => {
 			setInfoPlayer(() => {
 				localStorage.setItem("info", JSON.stringify(rest));
 
@@ -180,12 +178,15 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 
 				return pieces;
 			});
+			if (players?.length) {
+				setPlayersSummary(players);
+			}
 		});
 
 		return () => {
 			ready.off("ready");
 		};
-	});
+	}, []);
 
 	const updateHandListener = (move: number[]) => {
 		if (myPieces.length) {
@@ -200,17 +201,85 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 	};
 
 	useEffect(() => {
-		const full = socket.on("full", () => {
-			toast(`Sala cheia.`, {
-				position: "top-right",
-				autoClose: 1800,
+		const dontExist = socket.on("DontExist", () => {
+			toast.error("Sala não existe ou foi encerrada.");
+			localStorage.clear();
+			setInfoPlayer(null);
+			setRoomSaved(null);
+			window.location.href = "/";
+		});
+
+		return () => {
+			dontExist.off("DontExist");
+		};
+	}, []);
+
+	useEffect(() => {
+		const playerNotFound = socket.on("playerNotFound", (message?: string) => {
+			setIsYourTime(true);
+			toast.error(message ?? "Sala não encontrada. Tente novamente.", {
+				autoClose: 2000,
 			});
+		});
+
+		return () => {
+			playerNotFound.off("playerNotFound");
+		};
+	}, []);
+
+	useEffect(() => {
+		const updateHand = socket.on("updateHand", (hand: number[][]) => {
+			setMyPieces(hand);
+			localStorage.setItem("pieces", JSON.stringify(hand));
+		});
+
+		return () => {
+			updateHand.off("updateHand");
+		};
+	}, []);
+
+	useEffect(() => {
+		const playerDrewPiece = socket.on(
+			"playerDrewPiece",
+			({
+				players,
+				passedTurn,
+				playerID,
+			}: {
+				players: Player[];
+				passedTurn?: boolean;
+				playerID: string;
+			}) => {
+				setPlayersSummary(players);
+				if (passedTurn && playerID !== infoPlayer?.id) {
+					toast.info("Um jogador passou a vez.", { autoClose: 800 });
+				}
+			},
+		);
+
+		return () => {
+			playerDrewPiece.off("playerDrewPiece");
+		};
+	}, [infoPlayer?.id]);
+	useEffect(() => {
+		const full = socket.on("full", () => {
+			toast.error("Sala cheia ou jogo já iniciado. Redirecionando...", {
+				position: "top-right",
+				autoClose: 2500,
+			});
+			localStorage.removeItem("room");
+			setRoomSaved(null);
+			setInfoPlayer(null);
+			setMyPieces([]);
+			setTimeout(() => {
+				window.location.href = "/";
+			}, 800);
 		});
 
 		return () => {
 			full.off("full");
 		};
-	});
+	}, []);
 
 	useEffect(() => {
 		const nextPlayer = socket.on("nextPlayer", () => {
@@ -236,6 +305,15 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 		const handleNewMove = (values: NewMove) => {
 			if (values.whoPlayed === infoPlayer?.id) {
 				updateHandListener(values.move);
+			}
+
+			if (values.players?.length) {
+				setPlayersSummary(values.players);
+			}
+
+			if (Array.isArray(values.boardTiles)) {
+				setMoves(values.boardTiles);
+				return;
 			}
 
 			setMoves((prevMoves) => {
@@ -283,6 +361,7 @@ export const GameProvider: FC<IGame> = ({ children }) => {
 				waitPlayers,
 				selectedPiece,
 				room: roomSaved,
+				playersSummary,
 
 				onMove,
 				onStart,

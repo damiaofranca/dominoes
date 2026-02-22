@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { InRoom, Initial } from "./pages";
-import { Test } from "./pages/Test";
 import { GameProvider } from "./providers/Game";
 
 const router = createBrowserRouter([
@@ -15,10 +14,6 @@ const router = createBrowserRouter([
 	{
 		path: "/room/:room",
 		element: <InRoom />,
-	},
-	{
-		path: "/test",
-		element: <Test />,
 	},
 ]);
 

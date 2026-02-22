@@ -6,6 +6,12 @@
 	grid-template-columns: 210px auto 100px;
 }
 
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
 .moves-container {
 	display: flex;
 	align-items: center;
@@ -28,6 +34,27 @@
 
 	&::-webkit-scrollbar-thumb {
 		background-color: #189370;
+	}
+}
+
+.players-summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 10px;
+	align-items: center;
+	padding: 8px 0;
+	font-size: 0.85rem;
+	color: #e0e0e0;
+
+	.players-summary-title {
+		width: 100%;
+		font-weight: 600;
+	}
+	.players-summary-item {
+		&.you {
+			font-weight: 600;
+			color: #189370;
+		}
 	}
 }
 

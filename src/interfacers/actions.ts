@@ -3,10 +3,12 @@ export interface NewMove {
 	players: Player[];
 	whoPlayed: string;
 	direction: "top" | "bottom";
+	boardTiles?: number[][];
 }
 
 export interface Player {
 	id: string;
+	name?: string;
 	total: number;
 }
 

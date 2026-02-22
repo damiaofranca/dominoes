@@ -18,6 +18,8 @@ export const Ready: FC<IReady> = () => {
 		myPieces,
 		isYourTime,
 		selectedPiece,
+		playersSummary,
+		infoPlayer,
 
 		onMove,
 		onSignOut,
@@ -67,9 +69,26 @@ export const Ready: FC<IReady> = () => {
 	}, [moves]);
 	return (
 		<div className="wrapper">
-			<div className="my-pieces">
-				<div className="count-pieces">
-					<Pieces pieces={piecesElements} onSelectPiece={onSelectPiece} />
+			<div className="sidebar">
+				{playersSummary.length > 0 && (
+					<div className="players-summary">
+						<span className="players-summary-title">Jogadores:</span>
+						{playersSummary.map((p) => (
+							<span key={p.id} className="players-summary-item">
+								{p.name ?? "Jogador"} ({p.total} peças)
+							</span>
+						))}
+						{infoPlayer && (
+							<span className="players-summary-item you">
+								Você ({myPieces.length} peças)
+							</span>
+						)}
+					</div>
+				)}
+				<div className="my-pieces">
+					<div className="count-pieces">
+						<Pieces pieces={piecesElements} onSelectPiece={onSelectPiece} />
+					</div>
 				</div>
 			</div>
 			<div className="moves-container">

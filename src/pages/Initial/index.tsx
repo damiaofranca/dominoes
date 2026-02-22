@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import "./styles.scss";
+import { toast } from "react-toastify";
 
 import { socket } from "../../socket/index";
 import { useNavigate } from "react-router-dom";
@@ -30,15 +31,35 @@ export const Initial: FC<IInitial> = () => {
 	};
 
 	useEffect(() => {
-		const enter = socket.on("created", (roomCb: string) => {
+		const created = socket.on("created", (roomCb: string) => {
 			onSetRoom(roomCb);
 			navigate(`room/${roomCb}`);
 		});
 
+		const createFailed = socket.on(
+			"createFailed",
+			({
+				reason,
+				min,
+				max,
+			}: {
+				reason?: string;
+				min?: number;
+				max?: number;
+			}) => {
+				const msg =
+					reason === "invalid_max_players" && min != null && max != null
+						? `Quantidade de jogadores deve ser entre ${min} e ${max}.`
+						: (reason ?? "Não foi possível criar a sala.");
+				toast.error(msg, { autoClose: 3000 });
+			},
+		);
+
 		return () => {
-			enter.off("created");
+			created.off("created");
+			createFailed.off("createFailed");
 		};
-	});
+	}, [navigate, onSetRoom]);
 
 	return (
 		<div className="container-card">
@@ -66,7 +87,7 @@ export const Initial: FC<IInitial> = () => {
 					id="maxPlayer"
 					value={maxPlayers}
 					onChange={onSelectQuantity}
-					placeholder="Quantidade maxima de jogadores"
+					aria-placeholder="Quantidade maxima de jogadores"
 				>
 					<option value="2">2 jogadores</option>
 					<option value="3">3 jogadores</option>
